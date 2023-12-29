@@ -14,7 +14,8 @@
   "license": "ISC",
   "dependencies": {
     "commander": "^11.1.0",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "save-dev": "^0.0.1-security"
   },
   "devDependencies": {
     "eslint": "^8.56.0",
