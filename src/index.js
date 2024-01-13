@@ -61,5 +61,3 @@ export default (filepath1, filepath2) => {
   const diff = getDiffFiles(file1, file2);
   return outputDiff(diff);
 };
-
-export { parse };
