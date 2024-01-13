@@ -1,12 +1,13 @@
+import { cwd } from 'node:process';
+import { resolve, extname } from 'node:path';
 import parse from '../src/parse.js';
-
 import genDiff from '../src/index.js';
 
-const jsonAbsoluteFilepath1 = '/home/shtiltckhen/frontend-project-46/__fixtures__/file1.json';
-const jsonAbsoluteFilepath2 = '/home/shtiltckhen/frontend-project-46/__fixtures__/file2.json';
+const jsonAbsoluteFilepath1 = resolve(cwd(), '__fixtures__/file1.json');
+const jsonAbsoluteFilepath2 = resolve(cwd(), '__fixtures__/file2.json');
 
-const ymlAbsoluteFilepath1 = '/home/shtiltckhen/frontend-project-46/__fixtures__/file1.yml';
-const ymlAbsoluteFilepath2 = '/home/shtiltckhen/frontend-project-46/__fixtures__/file2.yml';
+const ymlAbsoluteFilepath1 = resolve(cwd(), '__fixtures__/file1.yml');
+const ymlAbsoluteFilepath2 = resolve(cwd(), '__fixtures__/file2.yml');
 
 const jsonFilepath1 = '__fixtures__/file1.json';
 const jsonFilepath2 = '__fixtures__/file2.json';
