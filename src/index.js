@@ -1,22 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { cwd } from 'node:process';
 import { resolve, extname } from 'node:path';
-import { load } from 'js-yaml';
+import parse from './parse.js';
 
-const getObject = (filepath) => {
-  const path = filepath.startsWith('/') ? filepath : resolve(cwd(), filepath);
-  const ext = extname(filepath);
-  const obj = readFileSync(path, 'utf8');
-  let result = {};
-  if (ext === '.json') {
-    result = JSON.parse(obj);
-  } else if (ext === '.yaml' || ext === '.yml') {
-    result = load(obj);
-  }
-  return result;
-};
-
-const findDiff = (file1, file2) => {
+const getDiffFiles = (file1, file2) => {
   const keys1 = Object.keys(file1);
   const keys2 = Object.keys(file2);
   const result = keys1.reduce((acc, key) => {
@@ -58,9 +45,21 @@ const outputDiff = (diff) => {
   return result.join('\n');
 };
 
+const getData = (filepath) => {
+  const path = filepath.startsWith('/') ? filepath : resolve(cwd(), filepath);
+  const data = readFileSync(path, 'utf8');
+  const ext = extname(filepath);
+  return [data, ext];
+};
+
 export default (filepath1, filepath2) => {
-  const file1 = getObject(filepath1);
-  const file2 = getObject(filepath2);
-  const diff = findDiff(file1, file2);
+  const [data1, ext1] = getData(filepath1);
+  const [data2, ext2] = getData(filepath2);
+
+  const file1 = parse(data1, ext1);
+  const file2 = parse(data2, ext2);
+  const diff = getDiffFiles(file1, file2);
   return outputDiff(diff);
 };
+
+export { parse };
