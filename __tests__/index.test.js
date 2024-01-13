@@ -1,5 +1,5 @@
 import { cwd } from 'node:process';
-import { resolve, extname } from 'node:path';
+import { resolve } from 'node:path';
 import parse from '../src/parse.js';
 import genDiff from '../src/index.js';
 
