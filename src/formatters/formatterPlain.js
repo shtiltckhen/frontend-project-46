@@ -10,17 +10,18 @@ const formatterPlain = (tree, parent = '') => {
   };
   return tree
     .map((node) => {
+      const nameProperty = parent + node.key;
       switch (node.status) {
         case 'unchanged':
           break;
         case 'haveChildren':
-          return formatterPlain(node.value, `${parent + node.key}.`);
+          return formatterPlain(node.value, `${nameProperty}.`);
         case 'changed':
-          return `Property '${parent + node.key}' was updated. From ${getValue(node.oldValue)} to ${getValue(node.newValue)}`;
+          return `Property '${nameProperty}' was updated. From ${getValue(node.oldValue)} to ${getValue(node.newValue)}`;
         case 'removed':
-          return `Property '${parent + node.key}' was removed`;
+          return `Property '${nameProperty}' was removed`;
         case 'added':
-          return `Property '${parent + node.key}' was added with value: ${getValue(node.value)}`;
+          return `Property '${nameProperty}' was added with value: ${getValue(node.value)}`;
         default:
           throw new Error(`Unexpected status: ${node.status}`);
       }
