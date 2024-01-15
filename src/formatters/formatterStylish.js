@@ -10,6 +10,8 @@ const getValue = (curValue, replacer, replacerCount, level) => {
 };
 
 const formatterStylish = (tree, replacer = ' ', replacerCount = 4, depth = 1) => {
+  const getString = (key, value, sign) => `${replacer.repeat(replacerCount * (depth - 1))}  ${sign} ${key}: ${getValue(value, replacer, replacerCount, depth + 1)}`;
+
   const formatedTree = tree.reduce((acc, node) => {
     switch (node.status) {
       case 'haveChildren':
@@ -19,14 +21,12 @@ const formatterStylish = (tree, replacer = ' ', replacerCount = 4, depth = 1) =>
         acc.push(`${replacer.repeat(replacerCount * depth)}${node.key}: ${node.value}`);
         break;
       case 'changed':
-        acc.push(`${replacer.repeat(replacerCount * (depth - 1))}  - ${node.key}: ${getValue(node.oldValue, replacer, replacerCount, depth + 1)}`);
-        acc.push(`${replacer.repeat(replacerCount * (depth - 1))}  + ${node.key}: ${getValue(node.newValue, replacer, replacerCount, depth + 1)}`);
+        acc.push(getString(node.key, node.oldValue, '-'));
+        acc.push(getString(node.key, node.newValue, '+'));
         break;
       case 'added':
-        acc.push(`${replacer.repeat(replacerCount * (depth - 1))}  + ${node.key}: ${getValue(node.value, replacer, replacerCount, depth + 1)}`);
-        break;
       case 'removed':
-        acc.push(`${replacer.repeat(replacerCount * (depth - 1))}  - ${node.key}: ${getValue(node.value, replacer, replacerCount, depth + 1)}`);
+        acc.push(getString(node.key, node.value, node.status === 'added' ? '+' : '-'));
         break;
       default:
         throw new Error(`Unexpected status: ${node.status}`);
