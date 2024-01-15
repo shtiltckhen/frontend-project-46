@@ -15,7 +15,7 @@ const jsonFilepath2 = '__fixtures__/file2.json';
 const ymlFilepath1 = '__fixtures__/file1.yml';
 const ymlFilepath2 = '__fixtures__/file2.yml';
 
-const expectedOutput = `{
+const expectedOutputStylish = `{
     common: {
       + follow: false
         setting1: Value 1
@@ -60,16 +60,36 @@ const expectedOutput = `{
     }
 }`;
 
+const expectedOutputPlain = `Property 'common.follow' was added with value: false
+Property 'common.setting2' was removed
+Property 'common.setting3' was updated. From true to null
+Property 'common.setting4' was added with value: 'blah blah'
+Property 'common.setting5' was added with value: [complex value]
+Property 'common.setting6.doge.wow' was updated. From '' to 'so much'
+Property 'common.setting6.ops' was added with value: 'vops'
+Property 'group1.baz' was updated. From 'bas' to 'bars'
+Property 'group1.nest' was updated. From [complex value] to 'str'
+Property 'group2' was removed
+Property 'group3' was added with value: [complex value]`;
+
 test('parse', () => {
   expect(() => {
     parse('');
   }).toThrow();
 });
 
-test('genDiff', () => {
-  expect(genDiff(jsonFilepath1, jsonFilepath2)).toBe(expectedOutput);
-  expect(genDiff(jsonAbsoluteFilepath1, jsonAbsoluteFilepath2)).toBe(expectedOutput);
-  expect(genDiff(ymlFilepath1, ymlFilepath2)).toBe(expectedOutput);
-  expect(genDiff(ymlAbsoluteFilepath1, ymlAbsoluteFilepath2)).toBe(expectedOutput);
-  expect(genDiff(jsonFilepath1, ymlFilepath2)).toBe(expectedOutput);
+test('genDiff stylish', () => {
+  expect(genDiff(jsonFilepath1, jsonFilepath2, 'stylish')).toBe(expectedOutputStylish, 'stylish');
+  expect(genDiff(jsonAbsoluteFilepath1, jsonAbsoluteFilepath2, 'stylish')).toBe(expectedOutputStylish, 'stylish');
+  expect(genDiff(ymlFilepath1, ymlFilepath2, 'stylish')).toBe(expectedOutputStylish, 'stylish');
+  expect(genDiff(ymlAbsoluteFilepath1, ymlAbsoluteFilepath2, 'stylish')).toBe(expectedOutputStylish, 'stylish');
+  expect(genDiff(jsonFilepath1, ymlFilepath2, 'stylish')).toBe(expectedOutputStylish, 'stylish');
+});
+
+test('genDiff plain', () => {
+  expect(genDiff(jsonFilepath1, jsonFilepath2, 'plain')).toBe(expectedOutputPlain, 'plain');
+  expect(genDiff(jsonAbsoluteFilepath1, jsonAbsoluteFilepath2, 'plain')).toBe(expectedOutputPlain, 'plain');
+  expect(genDiff(ymlFilepath1, ymlFilepath2, 'plain')).toBe(expectedOutputPlain, 'plain');
+  expect(genDiff(ymlAbsoluteFilepath1, ymlAbsoluteFilepath2, 'plain')).toBe(expectedOutputPlain, 'plain');
+  expect(genDiff(jsonFilepath1, ymlFilepath2, 'plain')).toBe(expectedOutputPlain, 'plain');
 });

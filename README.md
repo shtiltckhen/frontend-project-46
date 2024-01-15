@@ -5,3 +5,4 @@
 ### Demo:
 * [`gendiff -f stylish filepath1.json filepath2.json`](https://asciinema.org/a/kDgDbrxRxZD3QOYo42wp1z8Ga)
 * [`gendiff -f stylish filepath1.yml filepath2.yml`](https://asciinema.org/a/JbJuP5qp8cy0APFjq6Ya58MyR)
+* [`gendiff -f plain __fixtures__/file1.yml __fixtures__/file2.yml`](https://asciinema.org/a/HhfuY2BqyvnHdlg8jdkzqjATD)
