@@ -14,7 +14,7 @@ const formatterStylish = (tree, replacer = ' ', replacerCount = 4, depth = 1) =>
   const indent = (level) => (replacer.repeat(replacerCount * (level - 1)));
   const formatedTree = tree.reduce((acc, node) => {
     switch (node.status) {
-      case 'haveChildren':
+      case 'hasChildren':
         acc.push(getString(node.key, formatterStylish(node.value, replacer, replacerCount, depth + 1), ' ', indent, depth));
         break;
       case 'unchanged':

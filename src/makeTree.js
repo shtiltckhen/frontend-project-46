@@ -20,7 +20,7 @@ const makeTree = (file1, file2) => {
     if (keys2.includes(key)) {
       const value2 = file2[key];
       if (isObject(value1) && isObject(value2)) {
-        return { status: 'haveChildren', key, value: makeTree(value1, value2) };
+        return { status: 'hasChildren', key, value: makeTree(value1, value2) };
       }
       if (value1 === value2) {
         return { status: 'unchanged', key, value: value1 };
