@@ -12,27 +12,28 @@ const getValue = (curValue, indent, level) => {
 
 const formatterStylish = (tree, replacer = ' ', replacerCount = 4, depth = 1) => {
   const indent = (level) => (replacer.repeat(replacerCount * (level - 1)));
-  const formatedTree = tree.reduce((acc, node) => {
+  const formatedTree = tree.flatMap((node) => {
+    let string;
     switch (node.status) {
       case 'hasChildren':
-        acc.push(getString(node.key, formatterStylish(node.value, replacer, replacerCount, depth + 1), ' ', indent, depth));
+        string = (getString(node.key, formatterStylish(node.value, replacer, replacerCount, depth + 1), ' ', indent, depth));
         break;
       case 'unchanged':
-        acc.push(getString(node.key, node.value, ' ', indent, depth));
+        string = (getString(node.key, node.value, ' ', indent, depth));
         break;
       case 'changed':
-        acc.push(getString(node.key, getValue(node.oldValue, indent, depth + 1), '-', indent, depth));
-        acc.push(getString(node.key, getValue(node.newValue, indent, depth + 1), '+', indent, depth));
+        string = [(getString(node.key, getValue(node.oldValue, indent, depth + 1), '-', indent, depth)),
+          (getString(node.key, getValue(node.newValue, indent, depth + 1), '+', indent, depth))];
         break;
       case 'added':
       case 'removed':
-        acc.push(getString(node.key, getValue(node.value, indent, depth + 1), node.status === 'added' ? '+' : '-', indent, depth));
+        string = (getString(node.key, getValue(node.value, indent, depth + 1), node.status === 'added' ? '+' : '-', indent, depth));
         break;
       default:
         throw new Error(`Unexpected status: ${node.status}`);
     }
-    return acc;
-  }, []);
+    return string;
+  });
 
   formatedTree.unshift('{');
   formatedTree.push(`${indent(depth)}}`);
