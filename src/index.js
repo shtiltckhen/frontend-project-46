@@ -5,6 +5,7 @@ import parse from './parse.js';
 import makeTree from './makeTree.js';
 import formatterStylish from './formatters/formatterStylish.js';
 import formatterPlain from './formatters/formatterPlain.js';
+import formatterJSON from './formatters/formatterJSON.js';
 
 const getData = (filepath) => {
   const path = filepath.startsWith('/') ? filepath : resolve(cwd(), filepath);
@@ -25,6 +26,8 @@ export default (filepath1, filepath2, format = 'stylish') => {
       return formatterStylish(tree);
     case 'plain':
       return formatterPlain(tree);
+    case 'json':
+      return formatterJSON(tree);
     default:
       throw new Error(`Unexpected format: ${format}`);
   }
