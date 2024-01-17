@@ -72,6 +72,122 @@ Property 'group1.nest' was updated. From [complex value] to 'str'
 Property 'group2' was removed
 Property 'group3' was added with value: [complex value]`;
 
+const expectedOutputJSON = `{
+  "key": "common",
+  "value": {
+    "status": "added",
+    "key": "follow",
+    "value": false
+  },
+  {
+    "status": "unchanged",
+    "key": "setting1",
+    "value": "Value 1"
+  },
+  {
+    "status": "removed",
+    "key": "setting2",
+    "value": 200
+  },
+  {
+    "status": "changed",
+    "key": "setting3",
+    "oldValue": true,
+    "newValue": null
+  },
+  {
+    "status": "added",
+    "key": "setting4",
+    "value": "blah blah"
+  },
+  {
+    "status": "added",
+    "key": "setting5",
+    "value": {
+      "key": "key5",
+      "value": "value5"
+    }
+  },
+  {
+    "key": "setting6",
+    "value": {
+      "key": "doge",
+      "value": {
+        "status": "changed",
+        "key": "wow",
+        "oldValue": "",
+        "newValue": "so much"
+      }
+    },
+    {
+      "status": "unchanged",
+      "key": "key",
+      "value": "value"
+    },
+    {
+      "status": "added",
+      "key": "ops",
+      "value": "vops"
+    }
+  }
+},
+{
+  "key": "group1",
+  "value": {
+    "status": "changed",
+    "key": "baz",
+    "oldValue": "bas",
+    "newValue": "bars"
+  },
+  {
+    "status": "unchanged",
+    "key": "foo",
+    "value": "bar"
+  },
+  {
+    "status": "changed",
+    "key": "nest",
+    "oldValue": {
+      "key": "key",
+      "value": "value"
+    },
+    "newValue": "str"
+  }
+},
+{
+  "status": "removed",
+  "key": "group2",
+  "value": {
+    "key": "abc",
+    "value": 12345
+  },
+  {
+    "key": "deep",
+    "value": {
+      "key": "id",
+      "value": 45
+    }
+  }
+},
+{
+  "status": "added",
+  "key": "group3",
+  "value": {
+    "key": "deep",
+    "value": {
+      "key": "id",
+      "value": {
+        "key": "number",
+        "value": 45
+      }
+    }
+  },
+  {
+    "key": "fee",
+    "value": 100500
+  }
+}`;
+
 test('parse', () => {
   expect(() => {
     parse('');
@@ -79,7 +195,7 @@ test('parse', () => {
 });
 
 test('genDiff stylish', () => {
-  expect(genDiff(jsonFilepath1, jsonFilepath2, 'stylish')).toBe(expectedOutputStylish, 'stylish');
+  expect(genDiff(jsonFilepath1, jsonFilepath2, 'stylish')).toBe(expectedOutputStylish);
   expect(genDiff(jsonAbsoluteFilepath1, jsonAbsoluteFilepath2, 'stylish')).toBe(expectedOutputStylish, 'stylish');
   expect(genDiff(ymlFilepath1, ymlFilepath2, 'stylish')).toBe(expectedOutputStylish, 'stylish');
   expect(genDiff(ymlAbsoluteFilepath1, ymlAbsoluteFilepath2, 'stylish')).toBe(expectedOutputStylish, 'stylish');
@@ -87,9 +203,9 @@ test('genDiff stylish', () => {
 });
 
 test('genDiff plain', () => {
-  expect(genDiff(jsonFilepath1, jsonFilepath2, 'plain')).toBe(expectedOutputPlain, 'plain');
-  expect(genDiff(jsonAbsoluteFilepath1, jsonAbsoluteFilepath2, 'plain')).toBe(expectedOutputPlain, 'plain');
-  expect(genDiff(ymlFilepath1, ymlFilepath2, 'plain')).toBe(expectedOutputPlain, 'plain');
-  expect(genDiff(ymlAbsoluteFilepath1, ymlAbsoluteFilepath2, 'plain')).toBe(expectedOutputPlain, 'plain');
-  expect(genDiff(jsonFilepath1, ymlFilepath2, 'plain')).toBe(expectedOutputPlain, 'plain');
+  expect(genDiff(jsonFilepath1, jsonFilepath2, 'plain')).toBe(expectedOutputPlain);
+});
+
+test('genDiff json', () => {
+  expect(genDiff(jsonFilepath1, jsonFilepath2, 'json')).toBe(expectedOutputJSON);
 });
