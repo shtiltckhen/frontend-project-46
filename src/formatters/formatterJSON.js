@@ -1,8 +1,10 @@
+const indent = (level) => `${'  '.repeat(level)}`;
+
 const getValue = (node, depth) => {
   if (Array.isArray(node)) {
     const res = node.map((obj) => {
-      const result = [`${'  '.repeat(depth)}{\n${'  '.repeat(depth + 1)}"key": "${obj.key}"`,
-        `${'  '.repeat(depth + 1)}"value": ${getValue(obj.value, depth + 1).trimStart()}\n${'  '.repeat(depth)}}`];
+      const result = [`${indent(depth - 1)}{\n${indent(depth)}"key": "${obj.key}"`,
+        `${indent(depth)}"value": ${getValue(obj.value, depth + 1).trimStart()}\n${indent(depth - 1)}}`];
       return result.join(',\n');
     });
     return res.join(',\n');
@@ -10,37 +12,47 @@ const getValue = (node, depth) => {
   return `${typeof (node) === 'string' ? `"${node}"` : node}`;
 };
 
+const getString = (status, key, value, func, depth) => {
+  const result = [];
+  if (status !== 'hasChildren') {
+    result.push(`${indent(depth - 1)}{\n${indent(depth)}"status": "${status}"`, `${indent(depth)}"key": "${key}"`);
+  } else {
+    result.push(`${indent(depth - 1)}{\n${indent(depth)}"key": "${key}"`);
+  }
+  if (status === 'changed') {
+    result.push(
+      `${indent(depth)}"oldValue": ${func(value[0], depth + 1).trimStart()}`,
+      `${indent(depth)}"newValue": ${func(value[1], depth + 1).trimStart()}\n${indent(depth - 1)}}`,
+    );
+  } else {
+    result.push(`${indent(depth)}"value": ${func(value, depth + 1).trimStart()}\n${indent(depth - 1)}}`);
+  }
+  return result;
+};
+
 const formatterJSON = (tree, depth = 1) => {
-  const result = tree.map((node) => {
+  const formatedTree = tree.map((node) => {
     let output;
     switch (node.status) {
       case 'hasChildren':
-        output = [`${'  '.repeat(depth - 1)}{\n${'  '.repeat(depth)}"key": "${node.key}"`,
-          `${'  '.repeat(depth)}"value": ${formatterJSON(node.value, depth + 1).trimStart()}\n${'  '.repeat(depth - 1)}}`];
+        output = getString(node.status, node.key, node.value, formatterJSON, depth);
         break;
       case 'unchanged':
-        output = [`${'  '.repeat(depth - 1)}{\n${'  '.repeat(depth)}"status": "${node.status}"`,
-          `${'  '.repeat(depth)}"key": "${node.key}"`,
-          `${'  '.repeat(depth)}"value": ${getValue(node.value, depth).trimStart()}\n${'  '.repeat(depth - 1)}}`];
+        output = getString(node.status, node.key, node.value, getValue, depth);
         break;
       case 'changed':
-        output = [`${'  '.repeat(depth - 1)}{\n${'  '.repeat(depth)}"status": "${node.status}"`,
-          `${'  '.repeat(depth)}"key": "${node.key}"`,
-          `${'  '.repeat(depth)}"oldValue": ${getValue(node.oldValue, depth).trimStart()}`,
-          `${'  '.repeat(depth)}"newValue": ${getValue(node.newValue, depth).trimStart()}\n${'  '.repeat(depth - 1)}}`];
+        output = getString(node.status, node.key, [node.oldValue, node.newValue], getValue, depth);
         break;
       case 'removed':
       case 'added':
-        output = [`${'  '.repeat(depth - 1)}{\n${'  '.repeat(depth)}"status": "${node.status}"`,
-          `${'  '.repeat(depth)}"key": "${node.key}"`,
-          `${'  '.repeat(depth)}"value": ${getValue(node.value, depth).trimStart()}\n${'  '.repeat(depth - 1)}}`];
+        output = getString(node.status, node.key, node.value, getValue, depth);
         break;
       default:
         throw new Error(`Unexpected status: "${node.status}"`);
     }
     return output.join(',\n');
   });
-  return result.join(',\n');
+  return formatedTree.join(',\n');
 };
 
 export default formatterJSON;
