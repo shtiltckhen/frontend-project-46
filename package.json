@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "[![Actions Status](https://github.com/shtiltckhen/frontend-project-46/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/shtiltckhen/frontend-project-46/actions)",
   "bin": {
-    "gendiff": "src/index.js"
+    "gendiff": "bin/gendiff.js"
   },
   "main": "bin/index.js",
   "type": "module",

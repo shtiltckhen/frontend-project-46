@@ -6,6 +6,7 @@ gendiff:
 
 publish:
 	npm publish --dry-run
+	npm link --force
 
 lint:
 	npx eslint .
