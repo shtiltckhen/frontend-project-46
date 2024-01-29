@@ -1,14 +1,13 @@
 const isObject = (node) => Object.prototype.toString.call(node) === '[object Object]';
 
 const getValue = (node) => {
-  if (!isObject(node)) {
-    return node;
-  }
   const keys = Object.keys(node);
   return keys.map((key) => {
     const value = node[key];
-    const newValue = isObject(value) ? getValue(value) : value;
-    return { key, value: newValue };
+    if (isObject(value)) {
+      return { key, children: getValue(value) };
+    }
+    return { key, value, children: [] };
   });
 };
 
@@ -20,20 +19,38 @@ const makeTree = (file1, file2) => {
     if (keys2.includes(key)) {
       const value2 = file2[key];
       if (isObject(value1) && isObject(value2)) {
-        return { status: 'hasChildren', key, value: makeTree(value1, value2) };
+        return { key, status: 'hasChildren', children: makeTree(value1, value2) };
       }
-      if (value1 === value2) {
-        return { status: 'unchanged', key, value: value1 };
+      if (isObject(value1) || isObject(value2)) {
+        return isObject(value1)
+          ? {
+            key, status: 'changed', newValue: value2, children: getValue(value1),
+          }
+          : {
+            key, status: 'changed', oldValue: value1, children: getValue(value2),
+          };
       }
-      return {
-        status: 'changed', key, oldValue: getValue(value1), newValue: getValue(value2),
-      };
+      return value1 === value2
+        ? {
+          key, status: 'unchanged', value: value1, children: [],
+        }
+        : {
+          key, status: 'changed', oldValue: value1, newValue: value2, children: [],
+        };
     }
-    return { status: 'removed', key, value: getValue(value1) };
+    return isObject(value1)
+      ? { key, status: 'removed', children: getValue(value1) }
+      : {
+        key, status: 'removed', value: value1, children: [],
+      };
   });
   const restKeys = keys2
     .filter((key) => !keys1.includes(key))
-    .map((key) => ({ status: 'added', key, value: getValue(file2[key]) }));
+    .map((key) => (isObject(file2[key])
+      ? { key, status: 'added', children: getValue(file2[key]) }
+      : {
+        key, status: 'added', value: file2[key], children: [],
+      }));
   tree.push(restKeys);
   return tree.flat().sort((a, b) => {
     const x = a.key >= b.key ? 1 : -1;

@@ -10,25 +10,22 @@ const getValue = (value) => {
 
 const formatterPlain = (tree, parent = '') => tree
   .map((node) => {
-    const nameProperty = parent + node.key;
     let string;
-    switch (node.status) {
-      case 'unchanged':
-        break;
-      case 'hasChildren':
-        string = formatterPlain(node.value, `${nameProperty}.`);
-        break;
-      case 'changed':
-        string = `Property '${nameProperty}' was updated. From ${getValue(node.oldValue)} to ${getValue(node.newValue)}`;
-        break;
-      case 'removed':
-        string = `Property '${nameProperty}' was removed`;
-        break;
-      case 'added':
-        string = `Property '${nameProperty}' was added with value: ${getValue(node.value)}`;
-        break;
-      default:
-        throw new Error(`Unexpected status: ${node.status}`);
+    const nameProperty = parent + node.key;
+    if (node.status === 'hasChildren') {
+      string = formatterPlain(node.children, `${nameProperty}.`);
+    }
+    if (node.status === 'changed') {
+      const oldValue = Object.hasOwn(node, 'oldValue') ? getValue(node.oldValue) : getValue(node.children);
+      const newValue = Object.hasOwn(node, 'newValue') ? getValue(node.newValue) : getValue(node.children);
+      string = `Property '${nameProperty}' was updated. From ${oldValue} to ${newValue}`;
+    }
+    if (node.status === 'removed') {
+      string = `Property '${nameProperty}' was removed`;
+    }
+    if (node.status === 'added') {
+      const value = Object.hasOwn(node, 'value') ? getValue(node.value) : getValue(node.children);
+      string = `Property '${nameProperty}' was added with value: ${value}`;
     }
     return string;
   })

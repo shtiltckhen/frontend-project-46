@@ -75,34 +75,34 @@ Property 'group3' was added with value: [complex value]`;
 const expectedOutputJSON = `{
   "key": "common",
   "value": {
-    "status": "added",
     "key": "follow",
+    "status": "added",
     "value": false
   },
   {
-    "status": "unchanged",
     "key": "setting1",
+    "status": "unchanged",
     "value": "Value 1"
   },
   {
-    "status": "removed",
     "key": "setting2",
+    "status": "removed",
     "value": 200
   },
   {
-    "status": "changed",
     "key": "setting3",
+    "status": "changed",
     "oldValue": true,
     "newValue": null
   },
   {
-    "status": "added",
     "key": "setting4",
+    "status": "added",
     "value": "blah blah"
   },
   {
-    "status": "added",
     "key": "setting5",
+    "status": "added",
     "value": {
       "key": "key5",
       "value": "value5"
@@ -113,20 +113,20 @@ const expectedOutputJSON = `{
     "value": {
       "key": "doge",
       "value": {
-        "status": "changed",
         "key": "wow",
+        "status": "changed",
         "oldValue": "",
         "newValue": "so much"
       }
     },
     {
-      "status": "unchanged",
       "key": "key",
+      "status": "unchanged",
       "value": "value"
     },
     {
-      "status": "added",
       "key": "ops",
+      "status": "added",
       "value": "vops"
     }
   }
@@ -134,19 +134,19 @@ const expectedOutputJSON = `{
 {
   "key": "group1",
   "value": {
-    "status": "changed",
     "key": "baz",
+    "status": "changed",
     "oldValue": "bas",
     "newValue": "bars"
   },
   {
-    "status": "unchanged",
     "key": "foo",
+    "status": "unchanged",
     "value": "bar"
   },
   {
-    "status": "changed",
     "key": "nest",
+    "status": "changed",
     "oldValue": {
       "key": "key",
       "value": "value"
@@ -155,8 +155,8 @@ const expectedOutputJSON = `{
   }
 },
 {
-  "status": "removed",
   "key": "group2",
+  "status": "removed",
   "value": {
     "key": "abc",
     "value": 12345
@@ -170,8 +170,8 @@ const expectedOutputJSON = `{
   }
 },
 {
-  "status": "added",
   "key": "group3",
+  "status": "added",
   "value": {
     "key": "deep",
     "value": {
