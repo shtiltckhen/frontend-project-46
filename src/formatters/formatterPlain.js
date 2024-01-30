@@ -1,5 +1,5 @@
 const getValue = (value) => {
-  if (value === null || value === undefined || typeof (value) === 'boolean') {
+  if (value === null || value === undefined || typeof (value) === 'boolean' || typeof (value) === 'number') {
     return value;
   }
   if (typeof (value) === 'object') {
