@@ -25,7 +25,6 @@ const formatterJSON = (tree, depth = 1) => {
     result.push(`${indent(depth - 1)}}`);
     return result.join('\n');
   });
-
   return formatedTree.join(',\n');
 };
 
