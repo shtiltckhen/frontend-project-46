@@ -51,8 +51,8 @@ const makeTree = (file1, file2) => {
       : {
         key, status: 'added', value: file2[key], children: [],
       }));
-  tree.push(restKeys);
-  return tree.flat().sort((a, b) => {
+  const result = [...tree, ...restKeys];
+  return result.slice().sort((a, b) => {
     const x = a.key >= b.key ? 1 : -1;
     return x;
   });
