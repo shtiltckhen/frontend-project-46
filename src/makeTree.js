@@ -1,3 +1,5 @@
+import sortBy from 'lodash/sortBy';
+
 const isObject = (node) => Object.prototype.toString.call(node) === '[object Object]';
 
 const getValue = (node) => {
@@ -51,11 +53,8 @@ const makeTree = (file1, file2) => {
       : {
         key, status: 'added', value: file2[key], children: [],
       }));
-  const result = [...tree, ...restKeys];
-  return result.slice().sort((a, b) => {
-    const x = a.key >= b.key ? 1 : -1;
-    return x;
-  });
+  const sortedTree = sortBy([...tree, ...restKeys], [(o) => o.key]);
+  return sortedTree;
 };
 
 export default makeTree;
