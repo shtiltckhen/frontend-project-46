@@ -27,10 +27,8 @@ const formatterStylish = (tree, replacer = ' ', replacerCount = 4, depth = 1) =>
       : formatterStylish(node.children, replacer, replacerCount, depth + 1);
     return getString(node.key, value, ' ', indent);
   });
-
-  formatedTree.unshift('{');
-  formatedTree.push(`${getIndent(depth)}}`);
-  return formatedTree.join('\n');
+  const result = ['{', ...formatedTree, `${getIndent(depth)}}`];
+  return result.join('\n');
 };
 
 export default formatterStylish;
