@@ -15,7 +15,7 @@ export default (filepath1, filepath2, format = 'stylish') => {
     case 'plain':
       return formatterPlain(tree);
     case 'json':
-      return formatterJSON(tree);
+      return JSON.stringify(formatterJSON(tree));
     default:
       throw new Error(`Unexpected format: ${format}`);
   }
