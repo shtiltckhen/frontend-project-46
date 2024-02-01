@@ -1,4 +1,4 @@
-import sortBy from 'lodash/sortBy';
+import sortBy from 'lodash/sortBy.js';
 
 const isObject = (node) => Object.prototype.toString.call(node) === '[object Object]';
 
