@@ -73,119 +73,83 @@ Property 'group2' was removed
 Property 'group3' was added with value: [complex value]`;
 
 const expectedOutputJSON = `{
-  "key": "common",
-  "value": {
-    "key": "follow",
-    "status": "added",
-    "value": false
+ "key": "common",
+ "status": "hasChildren",
+ "children": [
+  {
+   "key": "follow",
+   "status": "added",
+   "value": false,
+   "children": []
   },
   {
-    "key": "setting1",
-    "status": "unchanged",
-    "value": "Value 1"
+   "key": "setting1",
+   "status": "unchanged",
+   "value": "Value 1",
+   "children": []
   },
   {
-    "key": "setting2",
-    "status": "removed",
-    "value": 200
+   "key": "setting2",
+   "status": "removed",
+   "value": 200,
+   "children": []
   },
   {
-    "key": "setting3",
-    "status": "changed",
-    "oldValue": true,
-    "newValue": null
+   "key": "setting3",
+   "status": "changed",
+   "oldValue": true,
+   "newValue": null,
+   "children": []
   },
   {
-    "key": "setting4",
-    "status": "added",
-    "value": "blah blah"
+   "key": "setting4",
+   "status": "added",
+   "value": "blah blah",
+   "children": []
   },
   {
-    "key": "setting5",
-    "status": "added",
-    "value": {
-      "key": "key5",
-      "value": "value5"
+   "key": "setting5",
+   "status": "added",
+   "children": [
+    {
+     "key": "key5",
+     "value": "value5",
+     "children": []
     }
+   ]
   },
   {
-    "key": "setting6",
-    "value": {
-      "key": "doge",
-      "value": {
-        "key": "wow",
-        "status": "changed",
-        "oldValue": "",
-        "newValue": "so much"
+   "key": "setting6",
+   "status": "hasChildren",
+   "children": [
+    {
+     "key": "doge",
+     "status": "hasChildren",
+     "children": [
+      {
+       "key": "wow",
+       "status": "changed",
+       "oldValue": "",
+       "newValue": "so much",
+       "children": []
       }
+     ]
     },
     {
-      "key": "key",
-      "status": "unchanged",
-      "value": "value"
+     "key": "key",
+     "status": "unchanged",
+     "value": "value",
+     "children": []
     },
     {
-      "key": "ops",
-      "status": "added",
-      "value": "vops"
+     "key": "ops",
+     "status": "added",
+     "value": "vops",
+     "children": []
     }
+   ]
   }
-},
-{
-  "key": "group1",
-  "value": {
-    "key": "baz",
-    "status": "changed",
-    "oldValue": "bas",
-    "newValue": "bars"
-  },
-  {
-    "key": "foo",
-    "status": "unchanged",
-    "value": "bar"
-  },
-  {
-    "key": "nest",
-    "status": "changed",
-    "oldValue": {
-      "key": "key",
-      "value": "value"
-    },
-    "newValue": "str"
-  }
-},
-{
-  "key": "group2",
-  "status": "removed",
-  "value": {
-    "key": "abc",
-    "value": 12345
-  },
-  {
-    "key": "deep",
-    "value": {
-      "key": "id",
-      "value": 45
-    }
-  }
-},
-{
-  "key": "group3",
-  "status": "added",
-  "value": {
-    "key": "deep",
-    "value": {
-      "key": "id",
-      "value": {
-        "key": "number",
-        "value": 45
-      }
-    }
-  },
-  {
-    "key": "fee",
-    "value": 100500
-  }
+ ]
 }`;
 
 test('parse', () => {
