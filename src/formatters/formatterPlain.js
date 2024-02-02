@@ -11,22 +11,25 @@ const getValue = (value) => {
 const formatterPlain = (tree, parent = '') => tree
   .map((node) => {
     const nameProperty = parent + node.key;
-    if (node.status === 'hasChildren') {
-      return formatterPlain(node.children, `${nameProperty}.`);
+    switch (node.status) {
+      case 'hasChildren':
+        return formatterPlain(node.children, `${nameProperty}.`);
+      case 'changed': {
+        const oldValue = Object.hasOwn(node, 'oldValue') ? getValue(node.oldValue) : getValue(node.children);
+        const newValue = Object.hasOwn(node, 'newValue') ? getValue(node.newValue) : getValue(node.children);
+        return `Property '${nameProperty}' was updated. From ${oldValue} to ${newValue}`;
+      }
+      case 'removed':
+        return `Property '${nameProperty}' was removed`;
+      case 'added': {
+        const value = Object.hasOwn(node, 'value') ? getValue(node.value) : getValue(node.children);
+        return `Property '${nameProperty}' was added with value: ${value}`;
+      }
+      case 'unchanged':
+        return '';
+      default:
+        throw new Error(`Unexpected status: ${node.status}`);
     }
-    if (node.status === 'changed') {
-      const oldValue = Object.hasOwn(node, 'oldValue') ? getValue(node.oldValue) : getValue(node.children);
-      const newValue = Object.hasOwn(node, 'newValue') ? getValue(node.newValue) : getValue(node.children);
-      return `Property '${nameProperty}' was updated. From ${oldValue} to ${newValue}`;
-    }
-    if (node.status === 'removed') {
-      return `Property '${nameProperty}' was removed`;
-    }
-    if (node.status === 'added') {
-      const value = Object.hasOwn(node, 'value') ? getValue(node.value) : getValue(node.children);
-      return `Property '${nameProperty}' was added with value: ${value}`;
-    }
-    return '';
   })
   .filter(Boolean)
   .join('\n');
